@@ -2,6 +2,7 @@ import discord
 import urllib.request
 import json
 import requests
+import re
 
 client = discord.Client()
 client.login('username', 'password')
@@ -54,7 +55,16 @@ def on_message(message):
             tph = int(300*thr + 100*hun + 50*fif)
             tnh = int(thr + hun + fif + miss)
             acc = float(tph / (tnh*3))
-            msg += str('Beatmap : ' + 'https://osu.ppy.sh/b/'+player['beatmap_id'] + ' | ' + 'Acc : ' + "%.2f" % float(acc) + ' | ' + 'Rank : ' + player['rank'] + ' | ' + 'PP : ' + player['pp'] + '\n')
+            url="http://osu.ppy.sh/b/"+player['beatmap_id']
+            sock = urllib.urlopen(url)
+            htmldoc = sock.read()
+            sock.close()
+            try:
+                beatmapname = re.search("Detailed difficulty and ranking information for (.+?) \(mapped by ", htmldoc).group(1)
+            except AttributeError:
+                beatmapname = 'Information not found!'
+
+            msg += str('Beatmap : ' + beatmapname + 'Link: https://osu.ppy.sh/b/'+player['beatmap_id'] + '\n' + 'Acc : ' + "%.2f" % float(acc) + ' | ' + 'Rank : ' + player['rank'] + ' | ' + 'PP : ' + player['pp'] + '\n')
 
         client.send_message(message.channel, msg)
         
