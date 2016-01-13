@@ -64,7 +64,7 @@ def on_message(message):
             except AttributeError:
                 beatmapname = 'Information not found!'
 
-            msg += str('Beatmap : ' + beatmapname + 'Link: https://osu.ppy.sh/b/'+player['beatmap_id'] + '\n' + 'Acc : ' + "%.2f" % float(acc) + ' | ' + 'Rank : ' + player['rank'] + ' | ' + 'PP : ' + player['pp'] + '\n')
+            msg += str('Beatmap : ' + beatmapname + ' Link : https://osu.ppy.sh/b/'+player['beatmap_id'] + '\n' + 'Acc : ' + "%.2f" % float(acc) + ' | ' + 'Rank : ' + player['rank'] + ' | ' + 'PP : ' + player['pp'] + '\n')
 
         client.send_message(message.channel, msg)
         
