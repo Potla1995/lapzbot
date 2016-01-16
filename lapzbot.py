@@ -4,6 +4,7 @@ import json
 import requests
 import bs4
 import time
+import re
 ##import lxml.html
 
 client = discord.Client()
@@ -72,10 +73,18 @@ def on_message(message):
             tnh = int(thr + hun + fif + miss)
             acc = float(tph / (tnh*3))
             
-            bitits = requests.get('https://osu.ppy.sh/b/'+player['beatmap_id'])
-            html = bs4.BeautifulSoup(bitits.text, "lxml")
-            tits = html.title.text
+            url='https://osu.ppy.sh/b/'+player['beatmap_id']
+            with urllib.request.urlopen(url) as response:
+	            htmldoc = response.read()
+            response.close()
+            try:
+                tits = re.search(b'Detailed difficulty and ranking information for (.+?) \(mapped by ', htmldoc).group(1).decode("utf-8")
+            except AttributeError:
+                tits = 'Information not found!'
 
+#            bitits = requests.get('https://osu.ppy.sh/b/'+player['beatmap_id'])
+#            html = bs4.BeautifulSoup(bitits.text, "lxml")
+#            tits = html.title.text
 ##            t = lxml.html.parse('https://osu.ppy.sh/b/'+player['beatmap_id'])
 ##            tits = t.find(".//title").text
 
